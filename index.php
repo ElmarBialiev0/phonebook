@@ -42,9 +42,7 @@ $pageNum = (int)($_GET['p'] ?? 1);
     ?>
 </main>
 
-<footer>
-    <p>Задание для самостоятельной работы «Phonebook»</p>
-</footer>
+<footer></footer>
 
 </body>
 </html>

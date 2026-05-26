@@ -3,8 +3,7 @@ function renderMenu() {
     $page = $_GET['page'] ?? 'view';
     $sort = $_GET['sort'] ?? 'id';
 
-    $html = '<nav>';
-    $html .= '<div class="main-menu">';
+    $html = '<header>';
 
     $items = [
         'view'   => 'Просмотр',
@@ -14,31 +13,29 @@ function renderMenu() {
     ];
 
     foreach ($items as $key => $label) {
-        $active = ($page === $key) ? 'active' : '';
+        $active = ($page === $key) ? 'select' : '';
         $html .= "<a href='index.php?page={$key}' class='{$active}'>{$label}</a>";
     }
 
-    $html .= '</div>';
+    $html .= '</header>';
 
     // Подменю сортировки — только на странице просмотра
     if ($page === 'view') {
-        $html .= '<div class="sub-menu">';
+        $html .= '<div class="submenu">';
 
         $sorts = [
-            'id'        => 'По порядку добавления',
-            'lastname'  => 'По фамилии',
-            'birthdate' => 'По дате рождения',
+            'id'       => 'По порядку добавления',
+            'surname'  => 'По фамилии',
+            'date'     => 'По дате рождения',
         ];
 
         foreach ($sorts as $key => $label) {
-            $active = ($sort === $key) ? 'active' : '';
+            $active = ($sort === $key) ? 'select' : '';
             $html .= "<a href='index.php?page=view&sort={$key}' class='{$active}'>{$label}</a>";
         }
 
         $html .= '</div>';
     }
-
-    $html .= '</nav>';
 
     return $html;
 }

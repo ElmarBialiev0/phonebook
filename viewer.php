@@ -5,17 +5,14 @@ function renderViewer($sort = 'id', $pageNum = 1) {
     $perPage = 10;
     $offset = ($pageNum - 1) * $perPage;
 
-    // Допустимые поля сортировки
-    $allowedSorts = ['id', 'lastname', 'birthdate'];
+    $allowedSorts = ['id', 'surname', 'date'];
     if (!in_array($sort, $allowedSorts)) {
         $sort = 'id';
     }
 
-    // Общее количество записей
     $total = $db->query("SELECT COUNT(*) FROM contacts")->fetchColumn();
     $totalPages = ceil($total / $perPage);
 
-    // Получаем записи
     $stmt = $db->prepare("SELECT * FROM contacts ORDER BY {$sort} ASC LIMIT :limit OFFSET :offset");
     $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -29,7 +26,6 @@ function renderViewer($sort = 'id', $pageNum = 1) {
         return $html;
     }
 
-    // Таблица
     $html .= '<table>';
     $html .= '<tr>
         <th>#</th>
@@ -47,13 +43,13 @@ function renderViewer($sort = 'id', $pageNum = 1) {
     foreach ($contacts as $row) {
         $html .= '<tr>';
         $html .= '<td>' . htmlspecialchars($row['id']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($row['surname']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($row['name']) . '</td>';
         $html .= '<td>' . htmlspecialchars($row['lastname']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($row['firstname']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($row['middlename']) . '</td>';
         $html .= '<td>' . htmlspecialchars($row['gender']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($row['birthdate']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($row['date']) . '</td>';
         $html .= '<td>' . htmlspecialchars($row['phone']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($row['address']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($row['location']) . '</td>';
         $html .= '<td>' . htmlspecialchars($row['email']) . '</td>';
         $html .= '<td>' . htmlspecialchars($row['comment']) . '</td>';
         $html .= '</tr>';
@@ -61,7 +57,6 @@ function renderViewer($sort = 'id', $pageNum = 1) {
 
     $html .= '</table>';
 
-    // Пагинация
     if ($totalPages > 1) {
         $html .= '<div class="pagination">';
         for ($i = 1; $i <= $totalPages; $i++) {
